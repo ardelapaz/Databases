@@ -1,0 +1,52 @@
+    1) String, Int, Date, Float, Float
+
+    2) A text file would be used when only one application is accessing the data. A text file can be used in place of a database for most projects, but is extremely inefficient.
+       A database is used with most projects. It doesn't lock a file and limit access, making it very versatile to use when multiple applications or multiple instances of the application is accessing and updating the data in real time.
+
+    3) SQL is described as a declarative language instead of a procedural language, which most other languages are procedural. In plain english this just means that SQL code is more like describing what the result will be unlike procedural languages that give step by step instructions on how to manipulate, create, update, destroy, and more to all of the data in the program.
+
+    4) Databases allow for flexible storage of data of various types. With storing objects, you can sort through each object in the database based on one of it's many categories by splitting up things into columns. Say you had a database of a car dealership. One column could be "New / Used" and another can be year or production, allowing you to use SQL queries to easily find used cars made in a certain year to display to the customer who might be interested in a specific car from the early 2000's.
+
+    5) Table - The database set that holds all of the data.
+       Row - Horizontal row, holds all of the data of one object.
+       Column - Vertical data seperators. Used to split each row into specific categories.
+       Value - Value of data that is stored in each column in a row on the database.
+
+    6) String Int Float
+ 
+    7) Given this payments table, provide an English description of the following queries and include their results:
+
+       a. Return the date and amount column information for all objects from the payments table 
+          Answer: 
+          '2016-05-01' 1500.00
+          '2016-05-10' 37.00
+          '2016-05-15' 124.93
+          '2016-05-23' 54.72
+
+       b. Return all amounts in the payments table where the amount is greater than 500 
+          Answer: 1500.00
+
+       c. Return all data from the payments table where payee is "Mega Foods" 
+          Answer:   ('2016-05-15', 'Mega Foods',            124.93,  'Groceries'),
+
+
+    8)   Given the users table below, write the following SQL queries and their results:
+
+       a. Select the email and sign-up date for the user named DeAndre Data.
+
+         SELECT email, signup
+         FROM users
+         WHERE name = 'DeAndre Data';
+
+       b. Select the user ID for the user with email 'aleesia.algorithm@uw.edu'.
+
+         SELECT id
+         FROM users
+         WHERE email = 'aleesia.algorithm@uw.edu';
+
+       c. Select all the columns for the user ID equal to 4.
+
+         SELECT *
+         FROM users
+         WHERE id = 4;
+    
