@@ -37,9 +37,9 @@
             available_copies integer
         );
 
-    b.  INSERT INTO library(9781524796372, "Lost Roses", "Martha Hall Kelly", "Genre", "04/09/2019", 100, 100);
-        INSERT INTO library(9751250200358, "The Girl He Used To Know", "Tracey Garvis Graves", "Genre", "04/02/2019", 100, 100);
-        INSERT INTO library(9780385541381, "The Invited", "Jennifer McMahon", "Genre", "04/30/2019", 100, 0);
+    b.  INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9781524796372, "Lost Roses", "Martha Hall Kelly", "Genre", "04/09/2019", 100, 100);
+        INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9751250200358, "The Girl He Used To Know", "Tracey Garvis Graves", "Genre", "04/02/2019", 100, 100);
+        INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9780385541381, "The Invited", "Jennifer McMahon", "Genre", "04/30/2019", 100, 0);
 
     c.  UPDATE library SET available_copies = 99 WHERE ISBN = 9751250200358;
 
@@ -56,9 +56,9 @@
             distance integer
         );
 
-    b.  INSERT INTO spacecrafts(1, "SOYUZ-MS 12", "03/14/2019", "Russia", "Carry 3 members of Expedition 59 to the ISS", "orbiting", 411)
-        INSERT INTO spacecrafts(2, "SUZAKU", "07/10/2005", "Japan", "Observe celestial X-ray sources", "orbiting", 570)
-        INSERT INTO spacecrafts(3, "AIM", "04/25/2007", "USA", "Study noctilucent clouds", "orbiting", 80)
+    b.  INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (1, "SOYUZ-MS 12", "03/14/2019", "Russia", "Carry 3 members of Expedition 59 to the ISS", "orbiting", 411)
+        INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (2, "SUZAKU", "07/10/2005", "Japan", "Observe celestial X-ray sources", "orbiting", 570)
+        INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (3, "AIM", "04/25/2007", "USA", "Study noctilucent clouds", "orbiting", 80)
 
     c.  DELETE FROM spacecrafts WHERE id = 1;
 
@@ -81,9 +81,9 @@
             chain_id integer
         );
 
-    b.  INSERT INTO emails(1, "Test email 1", "test1email@bloc.io", "none", "This is a test email #1 for the assignment", "2019-04-09 14:54:00", "unread", "0");
-        INSERT INTO emails(2, "Test email 2", "test2email@bloc.io", "none", "This is a test email #2 for the assignment", "2019-04-09 14:55:00", "unread", "0");
-        INSERT INTO emails(3, "Test email 3", "test3email@bloc.io", "none", "This is a test email #3 for the assignment", "2019-04-09 14:56:00", "unread", "0");
+    b.  INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (1, "Test email 1", "test1email@bloc.io", "none", "This is a test email #1 for the assignment", "2019-04-09 14:54:00", "unread", "0");
+        INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (2, "Test email 2", "test2email@bloc.io", "none", "This is a test email #2 for the assignment", "2019-04-09 14:55:00", "unread", "0");
+        INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (3, "Test email 3", "test3email@bloc.io", "none", "This is a test email #3 for the assignment", "2019-04-09 14:56:00", "unread", "0");
 
     c. DELETE FROM emails WHERE id = 2;
 
