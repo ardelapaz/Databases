@@ -2,24 +2,24 @@
     UPDATE
     DELETE
 
-2)  INSERT INTO *Table Name* (id, name, value) VALUES (#id, "name", value)
+2)  INSERT INTO *Table Name* (id, name, value) VALUES (#id, 'name', value)
     UPDATE *Table Name* SET *Property = new value* WHERE *id = #*
     DELETE FROM *Table Name* WHERE *id = #*
 
 3)  Numbers - Real numbers (Int // Double // Float ect) - 11432.91
-    Text - Strings / Characters - "This is an exmaple of text for a text data type"
+    Text - Strings / Characters - 'This is an exmaple of text for a text data type'
     Date/Time - Date or time values - TIMESTAMP '2013-03-13 19:06:00'
 
-4)  a. Text, text, integer, integer
+4)  a. Text, text, integer, smallint
 
     b.  CREATE TABLE wedding (
             name text,
             rsvp text,
             guests integer,
-            meals integer
+            meals smallint
         );
 
-    c.  ALTER TABLE wedding ADD COLUMN ty_card text;
+    c.  ALTER TABLE wedding ADD COLUMN ty_card boolean;
 
     d.  ALTER TABLE wedding DROP COLUMN meals;
 
@@ -28,7 +28,7 @@
     f.  DROP TABLE wedding;
 
 5)  a.  CREATE TABLE library (
-            ISBN integer,
+            ISBN bigint,
             title text,
             author text,
             genre text,
@@ -37,9 +37,9 @@
             available_copies integer
         );
 
-    b.  INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9781524796372, "Lost Roses", "Martha Hall Kelly", "Genre", "04/09/2019", 100, 100);
-        INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9751250200358, "The Girl He Used To Know", "Tracey Garvis Graves", "Genre", "04/02/2019", 100, 100);
-        INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9780385541381, "The Invited", "Jennifer McMahon", "Genre", "04/30/2019", 100, 0);
+    b.  INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9781524796372, 'Lost Roses', 'Martha Hall Kelly', 'Genre', '04/09/2019', 100, 100);
+        INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9751250200358, 'The Girl He Used To Know', 'Tracey Garvis Graves', 'Genre', '04/02/2019', 100, 100);
+        INSERT INTO library(ISBN, title, author, genre, pub_date, total_copies, available_copies) VALUES (9780385541381, 'The Invited', 'Jennifer McMahon', 'Genre', '04/30/2019', 100, 0);
 
     c.  UPDATE library SET available_copies = 99 WHERE ISBN = 9751250200358;
 
@@ -52,17 +52,17 @@
             launched date,
             country text,
             description text,
-            orbiting text,
+            orbiting boolean,
             distance integer
         );
 
-    b.  INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (1, "SOYUZ-MS 12", "03/14/2019", "Russia", "Carry 3 members of Expedition 59 to the ISS", "orbiting", 411)
-        INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (2, "SUZAKU", "07/10/2005", "Japan", "Observe celestial X-ray sources", "orbiting", 570)
-        INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (3, "AIM", "04/25/2007", "USA", "Study noctilucent clouds", "orbiting", 80)
+    b.  INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (1, 'SOYUZ-MS 12', '03/14/2019', 'Russia', 'Carry 3 members of Expedition 59 to the ISS', TRUE, 411)
+        INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (2, 'SUZAKU', '07/10/2005', 'Japan', 'Observe celestial X-ray sources', TRUE, 570)
+        INSERT INTO spacecrafts (id, name, launched, country, description, orbiting, distance) VALUES (3, 'AIM', '04/25/2007', 'USA', 'Study noctilucent clouds', TRUE, 80)
 
     c.  DELETE FROM spacecrafts WHERE id = 1;
 
-    d.  UPDATE spacecrafts SET orbiting = "non-orbiting" WHERE id = 2;
+    d.  UPDATE spacecrafts SET orbiting = FALSE WHERE id = 2;
 
     sources: http://www.satview.org/lista_sat.php?cat=tle-new
     https://www.britannica.com/topic/list-of-satellites-2024625
@@ -74,55 +74,63 @@
             id integer,
             subject text,
             sender text,
-            recipients text[],
+            recipients text,
             body text,
             timestamp date,
-            read text,
+            read boolean,
             chain_id integer
         );
 
-    b.  INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (1, "Test email 1", "test1email@bloc.io", "none", "This is a test email #1 for the assignment", "2019-04-09 14:54:00", "unread", "0");
-        INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (2, "Test email 2", "test2email@bloc.io", "none", "This is a test email #2 for the assignment", "2019-04-09 14:55:00", "unread", "0");
-        INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (3, "Test email 3", "test3email@bloc.io", "none", "This is a test email #3 for the assignment", "2019-04-09 14:56:00", "unread", "0");
+    b.  INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (1, 'Test email 1', 'test1email@bloc.io', 'none', 'This is a test email #1 for the assignment', '2019-04-09 14:54:00', FALSE, '0');
+        INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (2, 'Test email 2', 'test2email@bloc.io', 'none', 'This is a test email #2 for the assignment', '2019-04-09 14:55:00', FALSE, '0');
+        INSERT INTO emails (id, subject, sender, recipients, body, timestamp, read, chain_id) VALUES (3, 'Test email 3', 'test3email@bloc.io', 'none', 'This is a test email #3 for the assignment', '2019-04-09 14:56:00', FALSE, '0');
 
     c. DELETE FROM emails WHERE id = 2;
 
-    d. UPDATE emails SET read = "read" WHERE id = 3;
+    d. UPDATE emails SET read = 'read' WHERE id = 3;
 
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-List the commands for adding, updating, and deleting data
+1) List the commands for adding, updating, and deleting data
 
-Explain the structure for each type of command.
+2) Explain the structure for each type of command.
 
-What are some the data types that can be used in tables? Give a real world example of each.
+3) What are some the data types that can be used in tables? Give a real world example of each.
 
-Think through how to create a new table to hold a list of people invited to a wedding. This table needs to have first and last name, whether they sent in their RSVP, the number of guests they are bringing, and the number of meals (1 for adults and 1/2 for children).
+4) Think through how to create a new table to hold a list of people invited to a wedding. This table needs to have first and last name, whether they sent in their RSVP, the number of guests they are bringing, and the number of meals (1 for adults and 1/2 for children).
 
 Which data type would you use to store each of the following pieces of information?
 First and last name.
 Whether they sent in their RSVP.
 Number of guests.
 Number of meals.
+
 Write a command that makes the table to track the wedding.
-Using the table we just created, write a command that adds a column to track whether they were sent a thank you card.
-You have decided to move the data about the meals to another table, so write a command to remove the column storing the number meals from the wedding table.
-The guests are going to need a place to sit at the reception, so write a command that adds a column for table number.
-The wedding is over and we do not need to keep this information, so write a command that deletes the wedding table from the database.
-Write a command to make a new table to hold the books in a library with the columns ISBN, title, author, genre, publishing date, number of copies, and available copies.
 
-Find three books and add their information to the table.
-Someone has just checked out one of the books. Change the available copies column to 1 fewer.
-Now one of the books has been added to the banned books list. Remove it from the table.
-Write a command to make a new table to hold spacecrafts. Information should include id, name, year launched, country of origin, a brief description of the mission, orbiting body, if it is currently operating, and approximate miles from Earth. In addition to the table creation, provide commands that perform the following operations:
+-Using the table we just created, write a command that adds a column to track whether they were sent a thank you card.
+-You have decided to move the data about the meals to another table, so write a command to remove the column storing the number meals from the wedding table.
+-The guests are going to need a place to sit at the reception, so write a command that adds a column for table number.
+-The wedding is over and we do not need to keep this information, so write a command that deletes the wedding table from the database.
 
-Add 3 non-Earth-orbiting satellites to the table.
-Remove one of the satellites from the table since it has just been crashed into the planet.
-Edit another satellite because it is no longer operating and change the value to reflect that.
-Write a command to make a new table to hold the emails in your inbox. This table should include an id, the subject line, the sender, any additional recipients, the body of the email, the timestamp, whether or not it’s been read, and the id of the email chain it’s in. Also provide commands that perform the following operations:
 
-Add 3 new emails to the inbox.
-You’ve just deleted one of the emails, so write a command to remove the row from the inbox table.
-You started reading an email but just heard a crash in another room. Mark the email as unread before investigating, so you can come back to it later.
+5) Write a command to make a new table to hold the books in a library with the columns ISBN, title, author, genre, publishing date, number of copies, and available copies.
+
+-Find three books and add their information to the table.
+-Someone has just checked out one of the books. Change the available copies column to 1 fewer.
+-Now one of the books has been added to the banned books list. Remove it from the table.
+
+
+6) Write a command to make a new table to hold spacecrafts. Information should include id, name, year launched, country of origin, a brief description of the mission, orbiting body, if it is currently operating, and approximate miles from Earth. In addition to the table creation, provide commands that perform the following operations:
+
+-Add 3 non-Earth-orbiting satellites to the table.
+-Remove one of the satellites from the table since it has just been crashed into the planet.
+-Edit another satellite because it is no longer operating and change the value to reflect that.
+
+
+7) Write a command to make a new table to hold the emails in your inbox. This table should include an id, the subject line, the sender, any additional recipients, the body of the email, the timestamp, whether or not it’s been read, and the id of the email chain it’s in. Also provide commands that perform the following operations:
+
+-Add 3 new emails to the inbox.
+-You’ve just deleted one of the emails, so write a command to remove the row from the inbox table.
+-You started reading an email but just heard a crash in another room. Mark the email as unread before investigating, so you can come back to it later.
