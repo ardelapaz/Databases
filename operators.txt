@@ -58,4 +58,4 @@ NOT- Checks to see if something is not a set condition -  Ex: SELECT columns FRO
 
     c. 
     ( 3, 'Azul',     'M',       3,    '2016-01-11',  '2016-04-17'),
-    ( 4, 'Victoire', 'M',       7,    '2016-01-11',  '2016-09-01'),
+    ( 4, 'Victoire', 'M',       7,    '2016-01-11',  '~2016-09-01'),
