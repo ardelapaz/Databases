@@ -7,23 +7,29 @@
 2)  a.  SELECT SUM(amount) 
         FROM donations;
 
-    b.  SELECT SUM(amount) 
+    b.  SELECT donor, SUM(amount) 
         FROM donations
         GROUP BY donor;
 
-    *c. SELECT AVG(amount) 
+    *c. SELECT donor, AVG(amount) 
         FROM donations 
         GROUP BY donor;
 
-    d. SELECT COUNT(amount)
+    d.  SELECT COUNT(amount)
         FROM donations
         WHERE amount > 100;     
 
-    e. SELECT MAX(amount)
-       FROM donations; 
+    e.  SELECT donor, MAX(amount) as max
+        FROM donations
+        GROUP BY donor
+        ORDER BY max DESC
+        LIMIT 1;
 
-    f. SELECT MIN(amount)
-       FROM donations; 
+    f.  SELECT donor, MIN(amount) as min
+        FROM donations
+        GROUP BY donor
+        ORDER BY min
+        LIMIT 1;
 
 3)  The data is returned in the order it is in the table if returning multiple values unless it's being sorted or manipulated by another aggregate function.
 
@@ -37,20 +43,20 @@
 6)  WHERE filters data before aggregate functions, and HAVING filters data after the aggregate functions are complete.
 
 
-7)  SUM (amount), id
+7)  SELECT id, SUM (amount)
     FROM payment
-    WHERE SUM amount > 200
+    GROUP BY id
+    HAVING SUM (amount) > 200;
 
 
 8)  a.  SELECT *
         FROM cats
         ORDER BY intake_date;
 
-
     b. SELECT cat FROM adoptions ORDER BY date LIMIT 5;
 
 
-    c.  SELECT gender, adoption_date
+    c.  SELECT name, age, adoption_date
         FROM cats
         WHERE gender='F' AND adoption_date IS NULL AND age > 2;
 
