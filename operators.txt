@@ -1,0 +1,69 @@
+1) SELECT * from TableName;
+
+2) SELECT - Smelly
+   FROM -   Fish
+   JOIN -   Just
+   ON -     Oscillate in
+   WHERE -  Water
+   GROUP -  Grotesquely
+   HAVING - Having
+   ORDER -  (no) Other
+   LIMIT -  Liabilities
+
+3) 
+    a. SELECT name, gender, age FROM dogs WHERE breed = 'Labrador';
+
+    b. SELECT id FROM dogs WHERE age < 1;
+
+    c. SELECT name, age FROM dogs WHERE gender = 'F' AND weight > 35;
+
+    d. SELECT * FROM dogs WHERE LIKE breed != 'sheppard';
+
+    e. SELECT id, age, weight, breed FROM dogs WHERE weight > 60 OR breed = 'great dane';
+
+
+4)  a.( 'Mushi',   '2016-03-22'),
+      ( 'Seashell', NULL),
+      ( 'Azul',    '2016-04-17'),
+      ( 'Victoire','2016-09-01'),
+      ( 'Nala',     NULL);
+
+    b. All names and ages are returned.
+
+5)  a. SELECT * FROM cats WHERE adoption_date = NULL;
+
+    b. SELECT name, gender FROM cats WHERE age >= 7;
+
+    c. SELECT name from cats;
+
+6) 
+LIKE - Soft match a string, similar to using a keyword. Used to match any part of a string in the database with the searched string. Ex: WHERE LIKE '%labrador'   in the dogs table.
+BETWEEN - Used to search a range of values. Ex. a BETWEEN 10 AND 20 ==> a >= 10 AND a <= 20. 
+IS DISTINCT FROM - Determine if a value a is different than value b. Use in place of <> if one value could potentially be null. Ex: SELECT foo,bar FROM table WHERE foo IS DISTINCT FROM bar;
+IS TRUE / FALSE - Use to determine if value is true or false. Ex:  
+IS NULL - Checks to see if value is null. Ex: 
+AND - Combines two statements to check the table with. Returns table item that matches both conditions. Ex: SELECT columns FROM table WHERE is_this_value = 10 AND something_else = 20;
+OR - Checks for one statement or the other. Returns table value that matches one or the other condition. Ex: SELECT columns FROM table WHERE is_this_value = 10 OR is_that_value = 20;
+NOT- Checks to see if something is not a set condition -  Ex: SELECT columns FROM table WHERE NOT condition;
+> -  Compares two values to see if one is greater than the other. Ex: SELECT columns FROM table WHERE n > 5;
+< -  Compares two values to see if one is less than the other. Ex:  SELECT columns FROM table WHERE n < 5;
+= -  Compares two values to see if one is equal to the other. Ex: variable = 'test'  if (test = 'test')
+<= - Compares two values to see if one is less than or equal to the other. Ex: age = 20 if (age <= 30)
+>= - Compares two values to see if one is greater than or equal to the other. Ex: age = 20 if (age >= 30)
+!= - Compares two values to see if one is not equal to another. Ex: 'foo' != 'bar 
+<> - Same as != (not equal to) Ex: SELECT item WHERE value <> exclusion
+
+
+7)  a. 
+    ( 2, 'Seashell', 'F',       7,    '2016-01-09',   NULL),
+    ( 5, 'Nala',     'F',       1,    '2016-01-12',   NULL);
+
+    b. 
+    ( 1, 'Mushi',    'M',       1,    '2016-01-09',  '2016-03-22'),
+    ( 2, 'Seashell', 'F',       7,    '2016-01-09',   NULL),
+    ( 4, 'Victoire', 'M',       7,    '2016-01-11',  '2016-09-01'),
+    ( 5, 'Nala',     'F',       1,    '2016-01-12',   NULL);
+
+    c. 
+    ( 3, 'Azul',     'M',       3,    '2016-01-11',  '2016-04-17'),
+    ( 4, 'Victoire', 'M',       7,    '2016-01-11',  '~2016-09-01'),
