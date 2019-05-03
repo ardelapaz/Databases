@@ -1,0 +1,105 @@
+1)  Using an INNER JOIN statement.
+
+
+2)  CROSS JOIN - Joins the two tables based on everything the two tables do not have in common.
+    INNER JOIN - Joins the two tables based on everything the two tables share.
+    LEFT JOIN - Joins the two tables based on everything that the table on the left of the join statement has, along with whatever the right table has in common with the left.
+    RIGHT JOIN - Joins the two tables based on everything that the table on the right of the join statement has, along with whatever the left table has in common with the right.
+    FULL JOIN - Fully joins the two tables.
+
+3)  Primary key is - Unique to the primary table being used in the FROM of a query.
+Foreign key is - Column key for the table you are joining to the primary table identifying where on the second table to join the two.
+
+
+4)  Aliasing is renaming a table as a variable to allow for shorthand naming throughout the rest of the select statement.
+
+
+5)  SELECT professor.name, compensation.salary, compensation.vacation_days FROM professor as p 
+    JOIN compensation as c
+    ON p.id = c.professor_id;
+
+
+6)  To retrieve a table list of all matching columns of two other tables.
+For example, continuing with the vehicles table example if you wanted to retrieve a list of all cars that are in a sale but also
+all of the ones that were sold.
+
+
+7)  SELECT *
+    FROM scheduled_shifts
+    INNER JOIN shifts AS s ON s.id = shift_id
+    INNER JOIN employees AS e ON e.id = employee_id;
+
+
+8) 
+    a)  SELECT first_name AS volunteer_first_name, last_name AS volunteer_last_name, name AS dog_name 
+        FROM volunteers
+        LEFT JOIN dogs AS d ON d.id = foster_dog_id;
+
+    b)  SELECT name AS cat_name, first_name AS adopter_first_name, last_name AS adopter_last_name
+        FROM cat_adoptions
+        INNER JOIN cats AS c ON c.id = cat_id
+        INNER JOIN adopters AS a ON a.id = adopter_id;      
+
+    c)  SELECT a.first_name, a.last_name, d.name
+        FROM adopters AS a 
+        CROSS JOIN dogs AS d
+        LEFT OUTER JOIN dog_adoptions AS da ON da.adopter_id = a.id
+        WHERE da IS NULL;
+
+    d)  SELECT DISTINCT d.name AS dog_name, c.name AS cat_name
+        FROM dogs AS d
+        CROSS JOIN cats AS c
+        LEFT OUTER JOIN dog_adoptions AS da ON da.dog_id = d.id
+        LEFT OUTER JOIN cat_adoptions AS ca ON ca.cat_id = c.id
+        WHERE da IS NULL AND ca IS NULL;
+
+    e)  SELECT first_name, last_name, d.name AS dog_name
+        FROM volunteers AS v
+        RIGHT OUTER JOIN dogs AS d ON d.id = v.foster_dog_id;
+
+    f)  SELECT first_name, last_name
+        FROM adopters
+        INNER JOIN dog_adoptions ON adopter_id = id;    
+
+
+
+9) 
+    a)  SELECT name
+        FROM holds AS h
+        INNER JOIN books AS b ON b.isbn = h.isbn
+        INNER JOIN patrons AS p ON p.id = h.patron_id
+        WHERE b.title = 'Advanced Potion-Making'
+        ORDER BY h.rank ASC;
+
+
+    b)  SELECT DISTINCT title, checked_in_date AS date_available_from
+        FROM books AS b
+        LEFT JOIN transactions AS t ON t.isbn = b.isbn
+        LIMIT 3;
+
+
+    c)  SELECT AVG(t.checked_in_date - t.checked_out_date) AS "Average Checked Out Time", 
+	    (SELECT title FROM books AS b WHERE t.isbn = b.isbn) AS "Book Title"
+ 	        FROM transactions AS t 
+	        WHERE t.checked_in_date >  CURRENT_DATE - INTERVAL '30 DAYS'
+	    GROUP BY t.isbn
+
+
+    d)  SELECT title
+        FROM books AS b
+        LEFT JOIN transactions AS t ON t.isbn = b.isbn
+        WHERE checked_out_date < '20140503'
+        LIMIT 1;
+
+        ^ How do I filter results without the limit? I know the answer is the first one through the limit but I don't see a clear way of checking the rest of the table to see if the isbn is re-checked out in a single query.
+
+
+    e)  SELECT p.name AS "patrons name", b.title AS "book title"
+        FROM transactions AS t
+        RIGHT JOIN  patrons AS p ON t.patron_id = p.id
+        LEFT JOIN books AS b
+        ON t.isbn = b.isbn
+        AND t.checked_in_date IS null;
+
+
+

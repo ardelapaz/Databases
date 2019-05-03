@@ -1,0 +1,75 @@
+1)  SUM - Returns the sum of the values in a given column.
+    AVG - Returns the average of the values in a given column.
+    COUNT - Returns the total numbers of values (length of list) in a column.
+    MIN - Returns the lowest value in a column.
+    MAX - Returns the largest value in a column.
+
+2)  a.  SELECT SUM(amount) 
+        FROM donations;
+
+    b.  SELECT donor, SUM(amount) 
+        FROM donations
+        GROUP BY donor;
+
+    *c. SELECT donor, AVG(amount) 
+        FROM donations 
+        GROUP BY donor;
+
+    d.  SELECT COUNT(amount)
+        FROM donations
+        WHERE amount > 100;     
+
+    e.  SELECT donor, MAX(amount) as max
+        FROM donations
+        GROUP BY donor
+        ORDER BY max DESC
+        LIMIT 1;
+
+    f.  SELECT donor, MIN(amount) as min
+        FROM donations
+        GROUP BY donor
+        ORDER BY min
+        LIMIT 1;
+
+3)  The data is returned in the order it is in the table if returning multiple values unless it's being sorted or manipulated by another aggregate function.
+
+
+4)  If you know that your table might have extraneous values, you can use offset to exclude a set amount of values from your query.
+
+
+5)  Using "Order By" allows you to sort the returned values by ascending(default) or decending order. Sorted data is always easier to use and manipulate.
+
+
+6)  WHERE filters data before aggregate functions, and HAVING filters data after the aggregate functions are complete.
+
+
+7)  SELECT id, SUM (amount)
+    FROM payment
+    GROUP BY id
+    HAVING SUM (amount) > 200;
+
+
+8)  a.  SELECT *
+        FROM cats
+        ORDER BY intake_date;
+
+    b. SELECT cat FROM adoptions ORDER BY date LIMIT 5;
+
+
+    c.  SELECT name, age, adoption_date
+        FROM cats
+        WHERE gender='F' AND adoption_date IS NULL AND age > 2;
+
+    d.  SELECT SUM(amount) 
+        FROM donations
+        GROUP BY donor
+        LIMIT 5;
+
+
+    e.  SELECT SUM(amount) 
+        FROM donations
+        GROUP BY donor
+        LIMIT 10 OFFSET 5;
+
+
+
