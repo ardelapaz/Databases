@@ -14,7 +14,7 @@ Foreign key is - Column key for the table you are joining to the primary table i
 4)  Aliasing is renaming a table as a variable to allow for shorthand naming throughout the rest of the select statement.
 
 
-5)  SELECT professor.name, compensation.salary, compensation.vacation_days FROM professor as p 
+5)  SELECT professor.name AS "Professor Name", compensation.salary AS "Salary", compensation.vacation_days AS "Vacation Days" FROM professor as p 
     JOIN compensation as c
     ON p.id = c.professor_id;
 
@@ -25,9 +25,9 @@ all of the ones that were sold.
 
 
 7)  SELECT *
-    FROM scheduled_shifts
-    INNER JOIN shifts AS s ON s.id = shift_id
-    INNER JOIN employees AS e ON e.id = employee_id;
+    FROM shifts
+    LEFT OUTER JOIN scheduled_shifts AS ss ON ss.shift_id = shifts.id
+    LEFT OUTER JOIN employees AS e ON e.id = ss.employee_id;
 
 
 8) 
@@ -38,29 +38,35 @@ all of the ones that were sold.
     b)  SELECT name AS cat_name, first_name AS adopter_first_name, last_name AS adopter_last_name
         FROM cat_adoptions
         INNER JOIN cats AS c ON c.id = cat_id
-        INNER JOIN adopters AS a ON a.id = adopter_id;      
+        INNER JOIN adopters AS a ON a.id = adopter_id
+        WHERE date < CURRENT_DATE - INTERVAL '30 DAYS';       
 
-    c)  SELECT a.first_name, a.last_name, d.name
+    c)  SELECT a.first_name AS "Adopter's first name", a.last_name AS "Adopters last name", d.name AS "Dog Name"
         FROM adopters AS a 
         CROSS JOIN dogs AS d
         LEFT OUTER JOIN dog_adoptions AS da ON da.adopter_id = a.id
-        WHERE da IS NULL;
+        WHERE da IS NULL AND d.id != 10007;
 
-    d)  SELECT DISTINCT d.name AS dog_name, c.name AS cat_name
-        FROM dogs AS d
-        CROSS JOIN cats AS c
-        LEFT OUTER JOIN dog_adoptions AS da ON da.dog_id = d.id
-        LEFT OUTER JOIN cat_adoptions AS ca ON ca.cat_id = c.id
-        WHERE da IS NULL AND ca IS NULL;
+    d)  SELECT c.name
+    	FROM cats AS c
+    	LEFT JOIN cat_adoptions AS ca
+    	ON ca.cat_id = c.id
+    	WHERE ca.adopter_id is NULL
+    	UNION 
+    	SELECT d.name
+    	FROM dogs AS d
+    	LEFT JOIN dog_adoptions AS da
+    	ON da.dog_id = d.id
+    	WHERE da.adopter_id is NULL;
 
     e)  SELECT first_name, last_name, d.name AS dog_name
         FROM volunteers AS v
-        RIGHT OUTER JOIN dogs AS d ON d.id = v.foster_dog_id;
+        LEFT OUTER JOIN dogs AS d ON d.id = v.foster_dog_id;
 
     f)  SELECT first_name, last_name
         FROM adopters
-        INNER JOIN dog_adoptions ON adopter_id = id;    
-
+        INNER JOIN dog_adoptions AS da ON adopter_id = id
+        WHERE da.dog_id = 10007;   
 
 
 9) 
@@ -85,21 +91,22 @@ all of the ones that were sold.
 	    GROUP BY t.isbn
 
 
-    d)  SELECT title
+    d)  SELECT DISTINCT title, COUNT(*)
         FROM books AS b
         LEFT JOIN transactions AS t ON t.isbn = b.isbn
-        WHERE checked_out_date < '20140503'
+        WHERE checked_out_date < CURRENT_DATE - INTERVAL '5 YEARS'
+        GROUP BY title
         LIMIT 1;
 
-        ^ How do I filter results without the limit? I know the answer is the first one through the limit but I don't see a clear way of checking the rest of the table to see if the isbn is re-checked out in a single query.
 
-
-    e)  SELECT p.name AS "patrons name", b.title AS "book title"
+    e)  SELECT DISTINCT p.name AS "patrons name", b.title AS "book title"
         FROM transactions AS t
         RIGHT JOIN  patrons AS p ON t.patron_id = p.id
         LEFT JOIN books AS b
         ON t.isbn = b.isbn
-        AND t.checked_in_date IS null;
+        AND t.checked_in_date IS null
+        ORDER BY p.name
+        LIMIT 5;
 
 
 
