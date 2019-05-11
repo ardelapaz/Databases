@@ -5,7 +5,8 @@
     MAX - Returns the largest value in a column.
 
 2)  a.  SELECT SUM(amount) 
-        FROM donations;
+        FROM donations
+        WHERE date > DATEADD(year,-1,GETDATE());
 
     b.  SELECT donor, SUM(amount) 
         FROM donations
@@ -31,7 +32,11 @@
         ORDER BY min
         LIMIT 1;
 
-3)  The data is returned in the order it is in the table if returning multiple values unless it's being sorted or manipulated by another aggregate function.
+3)  The data returned will be in the order it is in the database unless you use an ORDER BY statement to sort the returned data on a set column by ascending (ASC) or decending (DESC) order at the end of your select statement:
+        
+        SELECT *
+        FROM table
+        ORDER BY rank (ASC / DESC)
 
 
 4)  If you know that your table might have extraneous values, you can use offset to exclude a set amount of values from your query.
@@ -53,8 +58,9 @@
         FROM cats
         ORDER BY intake_date;
 
-    b. SELECT cat FROM adoptions ORDER BY date LIMIT 5;
-
+    b.  SELECT cat 
+        FROM adoptions 
+        ORDER BY date DESC LIMIT 5;
 
     c.  SELECT name, age, adoption_date
         FROM cats
@@ -63,12 +69,14 @@
     d.  SELECT SUM(amount) 
         FROM donations
         GROUP BY donor
+        ORDER BY sum DESC
         LIMIT 5;
 
 
     e.  SELECT SUM(amount) 
         FROM donations
         GROUP BY donor
+        ORDER BY sum DESC
         LIMIT 10 OFFSET 5;
 
 
