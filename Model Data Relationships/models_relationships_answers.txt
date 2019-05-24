@@ -1,0 +1,71 @@
+1)
+    a)  SELECT first_name, last_name
+        FROM guests AS g
+        FULL JOIN booking AS b ON b.guest_id = g.id
+        WHERE b.guest_id IS NULL;
+
+    b)  SELECT first_name, last_name, check_in_date, COUNT(*) count
+        FROM guest AS g 
+        FULL JOIN booking AS b ON b.guest_id = g.id
+        GROUP BY check_in_date, first_name, last_name
+        HAVING COUNT(*) > 1;
+
+    c)  SELECT first_name, last_name, b.room_id AS "Room Number", COUNT(*) count
+        FROM guest AS g 
+        FULL JOIN booking AS b ON b.guest_id = g.id
+        GROUP BY b.room_id, first_name, last_name
+        HAVING COUNT(*) > 1;
+
+    d)  SELECT DISTINCT b.room_id AS "Room Number", COUNT(*) AS "Number of Guests"
+        FROM guest AS g 
+        FULL JOIN booking AS b ON b.guest_id = g.id
+        GROUP BY b.room_id
+        HAVING COUNT(*) > 1;
+
+2)  
+    a.  I. What classes/entites do we need to model?
+            -Classes, grades, and students.
+        II. What fields/attributes will each entity need?
+            -id's, grade values, room numbers, names and other info for students.
+        III. What data types do we need to use?
+            -Int, String, Char
+        IV. What relationships exist between entities?
+            -Id's tying each other together
+        V. How should those relationships be represented in tables?
+
+        
+    b.  I assumed grades would be either a character (or in the database image) a string. I also assumed the general information gathered from the students and I assumed all room numbers to be basic '10(x)' style room numbers.
+    
+    c. Asked mentor questions
+
+    d. Draw the model and include screenshot.
+    https://gyazo.com/1907de3b56365db7791c645f7da866c7?token=717181bd3283de9e56ae4b5d033b29e1
+
+3)
+    a.  SELECT first_name AS "Student First Name", last_name AS "Student Last Name", c.subject AS "Class"
+        FROM students AS s
+        LEFT OUTER JOIN schedule AS sch on sch.student_id = s.id
+        LEFT OUTER JOIN class AS c on c.id = sch.class_id
+        WHERE c.subject = 'math';
+
+    b.  SELECT grade, COUNT(*), c.subject
+        FROM class AS c
+        LEFT OUTER JOIN schedule AS s ON s.class_id = c.id
+        GROUP BY grade, c.subject;
+
+    c.  SELECT c.subject, COUNT(*) AS "Number of Students"
+        FROM class AS c
+        LEFT OUTER JOIN schedule AS s ON s.class_id = c.id
+        LEFT OUTER JOIN students AS st ON st.id = s.student_id
+        GROUP BY c.subject;
+
+    d.  SELECT c.subject, COUNT(*) AS "Number of Students"
+        FROM class AS c
+        LEFT OUTER JOIN schedule AS s ON s.class_id = c.id
+        LEFT OUTER JOIN students AS st ON st.id = s.student_id
+        GROUP BY c.subject
+        ORDER BY "Number of Students" DESC
+        LIMIT 1;
+
+    
+
