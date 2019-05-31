@@ -1,0 +1,89 @@
+1)  In your own words, explain the benefits of normalization. Include a real-world scenario where normalization is necessary.
+
+    Data normalization increases write performance. By allowing less columns in the table, data is able to be stored easier and with less anomolies and errors in the table. 
+    Normalization is necessary when designing a modern database because it allows for new values to be added easily without having a bunch of null entries. 
+    The less a new value is tied to everything else in the table, the easier it is to add to the database and the amount of null entities it has will reach 0 the more you normalize it.
+    Think of a library that checks out books. If the library's database for it's list of books contained a column for what person checked out the book, and the library just got new books and attempted to add them to
+    the database, each new book will have a null value for what person checked out each book since they haven't been checked out yet.
+
+2)  List and explain the different normal forms and how they relate to one another, with regard to your real-world scenario in the first question.
+
+    1NF - A column can not contain multiple values. 
+        If a person at the library has two books checked out, their entries in the database should be 2 different entries, one for each book they have checked out (with all other information being the same).
+
+    2NF - Must be 1nf and all non-key attributes must not conflict with key values.
+        If the table with the person's information (name, email, address, membership status, id) contained what is the author of the book this person recently checked out, that wouldn't be 2nf form because that 
+        author has nothing to do with the person's information. In 2nf, the table should only contain data that is directly relevant to the primary key. In this case, the author has no relationship with the
+        user's personal information and should be stored in a different table with a relation made to the user's id -> what book was checked out -> the author of said book.
+
+    3NF - Must be 2nf, must also have no transitive dependencies.
+        As stated in 2nf, all attributes must be related to the primary key, but none of the values can be transitively related to another. For example, if the library's member table contained data that specified
+        gender in order to see if one gender likes a certain category of books, that can be implemented but including it in the member's table directly ('M'/'F') means that the member's id does not relate to their gender.
+        The member's name directly relates to their gender, and their name relates to their id, thus meaning their gender relates to their ID (but it really shouldn't!). Changing the person's name might change their
+        gender, but since gender is tied to the ID transversely, changing the person's name would effect gender and ID, which shouldn't be the case. A relationship like that is a transitive relationship,
+        and the way to fix this is to have a gender ID in the members table, and create another table for genders and have id's for each gender.
+
+3)  This student_records table contains students and their grades in different subjects. The schema is already in first normal form (1NF). Convert this schema to the third normal form (3NF) using the techniques you learned in this checkpoint.
+
+    CREATE TABLE student_records (
+      "student_id"     INTEGER,
+      "student_email"  VARCHAR(24),
+      "student_name"   VARCHAR(9));
+
+    CREATE TABLE professors (
+      "professor_id" INTEGER,
+      "professor_name" VARCHAR(9));
+
+    CREATE TABLE subjects (
+      "professor_id" INTEGER,
+      "subject" VARCHAR(11)
+      "subject_id" INTEGER);
+
+    CREATE TABLE grades (
+      "student_id" INTEGER,
+      "grade" VARCHAR(1),
+      "subject_id" INTEGER);
+
+    INSERT INTO student_records
+        ("student_id",     "student_email",            	"student_name")
+    VALUES                                                                                                                                                
+        ( 1,               'john.b20@hogwarts.edu',        'John B'   ),
+        ( 2,               'sarah.s20@hogwarts.edu',       'Sarah S'  ),
+        ( 3,               'martha.l20@hogwarts.edu',      'Martha L' ),
+        ( 4,               'james.g20@hogwarts.edu',       'James G'  ),
+        ( 5,               'stanley.p20@hogwarts.edu',     'Stanley P');
+
+    INSERT INTO professors 
+    	("professor_id", "professor_name") VALUES
+        ('1',            'Natalie M'),
+        ('2',            'William C'),
+        ('3',            'Mark W');
+
+    INSERT INTO subjects 
+    	("professor_id", "subject",     "subject_id") VALUES
+        ('1',            'Economics'     1),
+        ('2',            'Philosophy'    2),
+        ('3',            'Mathematics'   3);
+
+    INSERT INTO grades
+    	("student_id", "grade",     "subject_id") VALUES
+        ('1',          'A'          2),
+        ('2',          'C'          2),
+        ('3',          'A'          1),
+    	('4',          'B'          3)
+    	('5',          'B'          1);
+
+
+4)  In your own words, explain the potential disadvantages of normalizing the data above. What are its trade-offs? Submit your findings in the submission table and discuss them with your mentor in your next session.
+
+    Normalizing the table in such a way as above is great for organization and maintaining a clean database, but potential disadvantages come when you throw this database into a large scale environment. With the amount of normalization such as this, to do most basic querys you will have to use a multitude of join statements, which only adds to its complexity and overall runtime of the query. Normalization's disadvantages are very present here causing for a larger database using more space, and for longer query times.
+
+5)  Looking at the tables you have normalized. If you need to denormalize to improve query performance or speed up reporting, how would you carry out denormalization for this database design? Submit potential strategies in the submission tab and discuss them with your mentor in your next session.
+
+    I would use primary keys and foreign keys to get back to one massive table.
+
+6)  Explore the trade-offs between data normalization and denormalization in this scenario, submit your findings in the submission tab, and discuss them with your mentor in your next session.
+
+    Normalization allows for values to be added easier and faster to a table, which is nice for large scale projects. The downside though, is that querys take considerably longer. Denormalization allows for querys
+    to run much faster and return data faster (keeping a user on a website since they don't have to wait for load times!), but it also uses more space which means the database is larger and would require more money
+    to host and run.
