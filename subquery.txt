@@ -1,0 +1,265 @@
+1)  Explain a subquery in your own words.
+    A subquery is a query within a query, used to further narrow down results from the original query.
+
+2)  Where can you use a subquery within a SELECT statement?
+    You can use a subquery in the FROM or WHERE of a select statement.
+
+3)  When would you employ a subquery?
+    You would use a subquery when you want to return specific potentially manipulated information from the database. I say potentially manipulated because subqueries can be used
+    with aggregate function to return some sort of calculation that you do not want to apply to the main query, or you can use them to combine data from multiple tables based
+    on set conditions.
+
+4)  Explain a row constructor in your own words.
+    A row constructor is similar to a regular constructor in other OOP languages. Its purpose is to designate the setup of the row in the database, similar to setting up the form 
+    of the object in OOP.
+
+5)  What happens if a row in the subquery result provides a NULL value to the comparison?
+    The result of the comparison will be NULL.
+
+6)  What are the ways to use a subquery within a WHERE clause? If you can't remember them, do these flashcards until you can.
+    EXISTS
+    NOT EXISTS
+    IN
+    NOT IN
+    ALL
+    SOME
+    ANY
+
+7)  Using this Adoption schema and data, please write queries to retrieve the following information and include the results:
+
+  a)  All volunteers. If the volunteer is fostering a dog, include each dog as well.
+
+    SELECT first_name AS "Volunteer's First Name", last_name AS "Volunteer's Last Name",
+       (SELECT name FROM dogs as d WHERE d.id = v.foster_dog_id)
+    FROM volunteers AS v;
+
+    Volunteer's First Name      Volunteer's Last Name    |  Dog Name
+    --------------------------|--------------------------|--------------
+    Albus	                  |  Dumbledore	             |   null
+    Rubeus	                  |  Hagrid	                 |   Munchkin
+    Remus	                  |  Lupin	                 |   null
+    Sirius	                  |  Black	                 |   null
+    Marjorie	              |  Dursley	             |   Marmaduke
+
+  b)  The cat's name, adopter's name, and adopted date for each cat adopted within the past month to be displayed as part of the "Happy Tail" social media promotion which posts recent successful adoptions.
+
+    SELECT date AS "Adoption Date",
+        (SELECT name FROM cats AS c WHERE ca.cat_id = c.id) AS "Cat Name", 
+             (SELECT last_name FROM adopters AS a WHERE ca.adopter_id = a.id) AS  "Adopter"
+    FROM cat_adoptions as ca 
+    WHERE date > CURRENT_DATE - INTERVAL '30 DAYS';
+
+    Adoption Date | Cat Name   | Adopter
+    --------------|------------|-----------
+    2019-05-05	  |  Mushi	   |   Figg
+    2019-05-05	  |  Victoire  |	Filch
+
+
+  c)  Adopters who have not yet chosen a dog to adopt and generate all possible combinations of adopters and available dogs.
+
+    SELECT a.first_name AS "Adopter's First Name", a.last_name AS "Adopter's Last Name", d.name AS "Dog Name"
+        FROM dog_adoptions AS da
+            JOIN (SELECT id, first_name, last_name FROM adopters) AS a
+                ON a.id != da.adopter_id
+            JOIN (SELECT id, name FROM dogs) AS d
+                ON d.id != da.dog_id;
+
+    Adopter's First Name   | Adopter's Last Name   | Dog Name
+    -----------------------|-----------------------|-----------
+    Hermione	           |  Granger	           |  Boujee
+    Hermione	           |  Granger	           |  Munchkin
+    Hermione	           |  Granger	           |  Marley
+    Hermione	           |  Granger	           |  Lassie
+    Hermione	           |  Granger	           |  Marmaduke
+    Arabella	           |  Figg	               |  Boujee
+    Arabella	           |  Figg	               |  Munchkin
+    Arabella	           |  Figg	               |  Marley
+    Arabella	           |  Figg	               |  Lassie
+    Arabella	           |  Figg	               |  Marmaduke
+
+  d)  Lists of all cats and all dogs who have not been adopted.
+
+    All dogs:
+    SELECT d.name AS "Dog Name"
+        FROM dog_adoptions AS da
+            JOIN (SELECT id, name FROM dogs) AS d
+            ON da.dog_id != d.id;
+
+        Dog Name         
+    |--------------|
+    |   Boujee     |
+    |   Munchkin   |
+    |   Marley     |
+    |   Lassie     |
+    |   Marmaduke  |
+
+    All cats:
+    SELECT DISTINCT c.name AS "Cat Name"
+        FROM cat_adoptions AS ca
+            JOIN (SELECT id, name FROM cats) AS c
+            ON ca.cat_id != c.id;
+
+        Cat Name       
+    |-------------|
+    |   Seashell  |
+    |   Mushi     |
+    |   Nala      |
+    |   Azul      |
+    |   Victoire  |
+
+  e)  The name of the person who adopted Rosco.
+    SELECT 
+	    (SELECT first_name FROM adopters AS a WHERE da.adopter_id = a.id) AS "Adopter's First Name",
+	    (SELECT last_name FROM adopters AS a WHERE da.adopter_id = a.id) AS "Adopter's Last Name"
+    FROM dog_adoptions AS da;
+
+    First Name   |  Last Name
+    -------------|-------------
+    Argus	     |    Filch
+
+
+8)  Using this Library schema and data, write queries applying the following scenarios, and include the results:
+
+    a)  To determine if the library should buy more copies of a given book, please provide the names and position, in order, of all of the patrons with a hold (request for a book with all copies checked out) on "Advanced Potion-Making".
+
+        SELECT
+            (SELECT name FROM patrons AS p WHERE p.id = h.patron_id), h.rank
+        FROM holds AS h
+        WHERE h.isbn = '9136884926'
+        ORDER BY h.rank;
+
+        
+        	Name        |    Rank
+        ----------------|---------------
+         Terry Boot     |    1
+         Cedric Diggory |    2
+
+    b)  Make a list of all book titles and denote whether or not a copy of that book is checked out.
+
+        SELECT
+            (SELECT title FROM books AS b WHERE b.isbn = t.isbn) AS "Book Title",
+            t.checked_in_date AS "Checked Back In Date"
+        FROM transactions AS t
+        ORDER BY t.checked_in_date; 
+
+        
+        Book Title	                              |     Checked Back In Date
+        ------------------------------------------|-------------------------------
+        Hogwarts: A History	                      |     2013-05-03
+        Advanced Potion-Making	                  |     2013-05-03
+        Fantastic Beasts and Where to Find Them	  |     2013-05-03
+        Fantastic Beasts and Where to Find Them	  |     2019-04-29
+        Fantastic Beasts and Where to Find Them	  |     2019-05-02
+        Advanced Potion-Making	                  |     null
+        Fantastic Beasts and Where to Find Them	  |     null
+
+
+    c)  In an effort to learn which books take longer to read, the librarians would like you to create a list of average checked out time by book name in the past month.
+
+        SELECT AVG(t.checked_in_date - t.checked_out_date) AS "Average Checked Out Time",
+            (SELECT title FROM books AS b WHERE b.isbn = t.isbn) AS "Book Title"
+        FROM transactions AS t
+        WHERE t.checked_in_date > CURRENT_DATE - INTERVAL '30 DAYS'
+        GROUP BY t.isbn;
+
+
+        Average Checked Out Time |	Book Title
+        -------------------------|--------------------------
+        2.5 (days)	             |  Fantastic Beasts and Where to Find Them
+
+    d)  In order to learn which items should be retired, make a list of all books that have not been checked out in the past 5 years.
+
+        SELECT
+            (SELECT title FROM books AS b WHERE t.isbn = b.isbn) AS "Book Title"
+        FROM transactions AS t
+        WHERE t.checked_out_date < CURRENT_DATE - INTERVAL '5 YEARS'
+        LIMIT 1;
+
+        (I tried using count to filter isbn's that show up more than once in the past 5 years but got continuous errors. How do you filter out extra results here without limit?)
+
+        
+            Book Title         
+        |-------------------|
+        |Hogwarts: A History|
+
+    e)  List all of the library patrons. If they have one or more books checked out, correspond the books to the patrons.
+
+        SELECT
+            (SELECT name FROM patrons AS p WHERE p.id = t.patron_id) AS "Patron Name",
+            (SELECT title FROM books AS b WHERE b.isbn = t.isbn AND t.checked_in_date IS NULL) AS "Book Title"
+        FROM transactions AS t
+        ORDER BY "Patron Name";
+
+        
+        Patron Name	            |   Book Title
+        ------------------------|--------------------------------------------
+        Cedric Diggory	        |   Fantastic Beasts and Where to Find Them
+        Cho Chang	            |   null
+        Hermione Granger	    |   null
+        Hermione Granger	    |   null
+        Padma Patil	            |   null
+        Terry Boot	            |   Advanced Potion-Making
+        Terry Boot	            |   null
+
+9)  Using this Flight schema and data, write queries applying the following scenarios, and include the results:
+
+    a)  To determine the most profitable airplanes, find all airplane models where each flight has had over 250 paying customers in the past month.
+
+        SELECT 
+            (SELECT airplane_model FROM flights AS f WHERE f.flight_number = t.flight_number) AS "Airplane Model", t.seats_sold AS "Seats Sold"
+        FROM transactions AS t
+        WHERE t.seats_sold > 250;
+
+        
+            Airplane Model	  |  Seats Sold
+            ------------------|-------------
+            Boeing 787	      |  280
+            Airbus A330	      |  287
+            Boeing 777	      |  380
+            Airbus A350	      |  310
+            Airbus A380	      |  490
+
+
+    b)  To determine the most profitable flights, find all destination-origin pairs where 90% or more of the seats have been sold in the past month.
+
+         SELECT 
+	        (SELECT model FROM airplanes AS a WHERE f.airplane_model = a.model) AS "Airplane Model",
+    	    (SELECT seat_capacity FROM airplanes AS a WHERE f.airplane_model = a.model) AS Seat_Capacity,
+    	    (SELECT seats_sold FROM transactions AS t WHERE f.flight_number = t.flight_number) AS Seats_Sold,
+    	    f.flight_number AS "Flight Number", f.origin AS "Origin", f.destination AS "Destination"
+        FROM flights AS f
+            JOIN transactions AS t
+            ON t.flight_number = f.flight_number
+            JOIN airplanes AS a
+                ON a.model = f.airplane_model
+        WHERE ((t.seats_sold * 1.0 )/ a.seat_capacity) >= 0.90;
+
+        Airplane Model	| seat_capacity	 |   seats_sold	 |   Flight Number | Origin	 | Destination
+       -----------------|----------------|---------------|-----------------|---------|-------------
+        Airbus A330	    |     287	     |      287	     |   137	       |   LHR	 |  JFK
+        Boeing 777	    |     400	     |      380	     |   8932	       |   SFO	 |  HKG
+        Airbus A380	    |     544	     |      490	     |   57	           |   LHR	 |  JNB
+
+    c)  The airline is looking to expand its presence in Asia and globally. Find the total revenue of any flight (not time restricted) arriving at or departing from Singapore (SIN).
+
+        SELECT SUM(result.total_revenue) AS "Total Revenue of Flights To or From Singapore"
+	    FROM flights as f
+	    JOIN
+  	        (SELECT t.total_revenue, t.flight_number
+   	        FROM transactions AS t 
+   	            JOIN flights AS f
+   	            ON f.flight_number = t.flight_number
+   	        WHERE f.origin = 'SIN' OR f.destination = 'SIN') AS result
+	    ON f.flight_number = result.flight_number;
+
+    
+        |Total Revenue of Flights To or From Singapore |
+        |----------------------------------------------|
+        |               ($)382,386.82                  | 
+
+
+10)  Compare the subqueries you've written above. Compare them to the joins you wrote in Checkpoint 6. Which ones are more readable? Which were more logical to write?
+
+        I personally think that the subquerys are easier to read and write. It makes more sense to me to have multiple select lines selecting whichever parts of the table need to be
+        used rather than figuring out how to join two tables and what data comes along with the join statement. With that being said, I think joins are still a great way to
+        write queries, but I would personally use subqueries more often than joins. 
