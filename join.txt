@@ -91,12 +91,14 @@ all of the ones that were sold.
 	    GROUP BY t.isbn
 
 
-    d)  SELECT DISTINCT title, COUNT(*)
-        FROM books AS b
-        LEFT JOIN transactions AS t ON t.isbn = b.isbn
-        WHERE checked_out_date < CURRENT_DATE - INTERVAL '5 YEARS'
-        GROUP BY title
-        LIMIT 1;
+    d)  SELECT title, isbn
+        FROM books as B
+        WHERE isbn NOT IN (
+        SELECT isbn
+        FROM transactions as T
+        WHERE checked_out_date > CURRENT_DATE - INTERVAL '5 YEARS'
+        GROUP BY isbn
+        HAVING COUNT(isbn) >= 1);
 
 
     e)  SELECT DISTINCT p.name AS "patrons name", b.title AS "book title"

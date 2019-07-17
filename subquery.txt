@@ -2,7 +2,7 @@
     A subquery is a query within a query, used to further narrow down results from the original query.
 
 2)  Where can you use a subquery within a SELECT statement?
-    You can use a subquery in the FROM or WHERE of a select statement.
+    You can use a subquery before the FROM, in the FROM, or in the WHERE of a select statement.
 
 3)  When would you employ a subquery?
     You would use a subquery when you want to return specific potentially manipulated information from the database. I say potentially manipulated because subqueries can be used
@@ -111,7 +111,9 @@
     SELECT 
 	    (SELECT first_name FROM adopters AS a WHERE da.adopter_id = a.id) AS "Adopter's First Name",
 	    (SELECT last_name FROM adopters AS a WHERE da.adopter_id = a.id) AS "Adopter's Last Name"
-    FROM dog_adoptions AS da;
+    FROM dog_adoptions AS da
+        JOIN (SELECT id FROM dogs AS d WHERE name = 'Rosco') AS R
+        ON r.id = da.dog_id;
 
     First Name   |  Last Name
     -------------|-------------
@@ -142,6 +144,11 @@
         FROM transactions AS t
         ORDER BY t.checked_in_date; 
 
+        SELECT DISTINCT b.title 
+FROM transactions AS t
+         JOIN (SELECT isbn, title FROM books) AS b
+         ON b.isbn = t.isbn;
+
         
         Book Title	                              |     Checked Back In Date
         ------------------------------------------|-------------------------------
@@ -169,14 +176,9 @@
 
     d)  In order to learn which items should be retired, make a list of all books that have not been checked out in the past 5 years.
 
-        SELECT
-            (SELECT title FROM books AS b WHERE t.isbn = b.isbn) AS "Book Title"
-        FROM transactions AS t
-        WHERE t.checked_out_date < CURRENT_DATE - INTERVAL '5 YEARS'
-        LIMIT 1;
-
-        (I tried using count to filter isbn's that show up more than once in the past 5 years but got continuous errors. How do you filter out extra results here without limit?)
-
+        SELECT title FROM books WHERE books.isbn NOT IN
+            (SELECT isbn FROM transactions AS t WHERE t.checked_out_date > CURRENT_DATE - INTERVAL '5 YEARS');
+    
         
             Book Title         
         |-------------------|
